@@ -4,37 +4,30 @@ import appConfig from '../config.json';
 //modificado - centralizado
 function GlobalStyle(){
   return (
-      <style global jsx>
-          {`
-              * {
-                  margin: 0;
-                  padding: 0;
-                  box-sizing: border-box;
-                  list-style: none;
-              }
-
-              body {
-                  font-family: sans-serif;
-              }
-
-              /* app fit height*/
-              html, body, #_next {
-                  min-height: 100vh;
-                  display: flex;
-                  flex: 1;
-              }
-
-              #_next {
-                  align-itens: center;
-                  flex: 1;
-              }
-
-              #_next > * {
-                  flex: 1;
-              }
-              /* ./app fit height*/
-          `}
-      </style>
+      <style global jsx>{`
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          list-style: none;
+        }
+        body {
+          font-family: 'Open Sans', sans-serif;
+        }
+        /* App fit Height */ 
+        html, body, #__next {
+          min-height: 100vh;
+          display: flex;
+          flex: 1;
+        }
+        #__next {
+          flex: 1;
+        }
+        #__next > * {
+          flex: 1;
+        }
+        /* ./App fit Height */ 
+      `}</style>
   )
 }
 
