@@ -7,40 +7,32 @@ function Title(argTitle){
   const Tag = argTitle.tag || 'h1';
   
   return (
-
-      <>
-          <Tag>{argTitle.children}</Tag>
-          <style jsx>{`
-              ${Tag}{
-                  color: ${appConfig.theme.colors.neutrals['900']};
-                  font-size: 24px;
-                  font-weight:600;
-              }
-          `}</style>
-      </>
+    <>
+      <Tag>{argTitle.children}</Tag>
+      <style jsx>{`
+          ${Tag}{
+              color: ${appConfig.theme.colors.neutrals['900']};
+              font-size: 24px;
+              font-weight:600;
+          }
+      `}</style>
+    </>
   );
 }
 
 export default function HomePage() {
-  //const username = 'Khrost';
-  const [username, setUsername] = React.useState('');//evolve tanto o antigo como o novo
+  const [username, setUsername] = React.useState('');
   const roteamento = useRouter();
-  //console.log(roteamento);//muitas funções, informações de navegação
-  const isDisabled = () => {
-    if(username.length <3) return true;
-    else return false;
-  }
 
   return (
     <>
-      {/*<GlobalStyle /> foi para a pasta generica _app*/}
       <Box
       styleSheet={{
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          backgroundColor: appConfig.theme.colors.primary[500],
-          backgroundImage: 'url(https://virtualbackgrounds.site/wp-content/uploads/2020/08/the-matrix-digital-rain.jpg)',
-          backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
-          }}
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        backgroundColor: appConfig.theme.colors.primary[500],
+        backgroundImage: 'url(https://virtualbackgrounds.site/wp-content/uploads/2020/08/the-matrix-digital-rain.jpg)',
+        backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
+        }}
       >
         <Box
           styleSheet={{
@@ -66,7 +58,7 @@ export default function HomePage() {
               //window.location.href = "/chat";//padrão para mudar de página
               
               //evitando o refrash da pagina através de roteamento do next
-              //roteamento.push('/chat');
+              roteamento.push('/chat');
             }}
             styleSheet={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
@@ -77,22 +69,7 @@ export default function HomePage() {
             <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals[300] }}>
               {appConfig.name}
             </Text>
-            {/*
-            <input 
-              type="text"
-              value={username}
-              onChange={function (event){
-                //é chamada toda vez que o usuário escrever algo: o valor estará em
-                //  event, ou seja, o primeiro argumento vai ser o valor
-                
-                console.log("usuario digitou " + event.target.value);
-                //onde ta o valor
-                const value = event.target.value;
-                //trocar o valor da variavel
-                //através do react
-                setUsername(value);
-              }}
-            />*/}
+
             <TextField
               value={username}
               onChange={function (event){
@@ -111,7 +88,7 @@ export default function HomePage() {
               }}
             />
             <Button
-              disabled={username.length < 3} //só precisa colocar a condição diretamente
+              disabled={username.length < 3} 
               type='submit'
               label='Entrar'
               fullWidth
