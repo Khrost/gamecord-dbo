@@ -26,7 +26,10 @@ export default function HomePage() {
   const [username, setUsername] = React.useState('');//evolve tanto o antigo como o novo
   const roteamento = useRouter();
   //console.log(roteamento);//muitas funções, informações de navegação
-
+  const isDisabled = () => {
+    if(username.length <3) return true;
+    else return false;
+  }
 
   return (
     <>
@@ -59,11 +62,11 @@ export default function HomePage() {
             as="form" /*area do formulario*/
             onSubmit={function (infosDoEvent){
               infosDoEvent.preventDefault();/*previni o refresh da pag inteira*/
-              console.log("entrou")
+              console.log(infosDoEvent);
               //window.location.href = "/chat";//padrão para mudar de página
               
               //evitando o refrash da pagina através de roteamento do next
-              roteamento.push('/chat');
+              //roteamento.push('/chat');
             }}
             styleSheet={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
@@ -108,6 +111,7 @@ export default function HomePage() {
               }}
             />
             <Button
+              disabled={username.length < 3} //só precisa colocar a condição diretamente
               type='submit'
               label='Entrar'
               fullWidth
