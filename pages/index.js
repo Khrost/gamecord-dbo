@@ -66,7 +66,7 @@ export default function HomePage() {
               //window.location.href = "/chat";//padrão para mudar de página
               
               //evitando o refrash da pagina através de roteamento do next
-              //roteamento.push('/chat');
+              roteamento.push('/chat');
             }}
             styleSheet={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
