@@ -1,16 +1,48 @@
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
-import React from 'react';
+import React, { useMemo } from 'react';
 import appConfig from '../config.json';
+//banco de dados online
+import { createClient } from '@supabase/supabase-js'
+
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzU2Mjk5MywiZXhwIjoxOTU5MTM4OTkzfQ.fmoIj13QWyIfjv0GDNdLakXIluKb164LXvLPUs5t0MY";
+const SUPABASE_URL = "https://kojqzxectxtqsijatbqr.supabase.co";
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 export default function ChatPage() {
-    const [userMensage, setUserText] = React.useState('');
+    const [userMensage, setUserText] = React.useState('');//valor | variavel responsavel pela mudança
     const [listaDeMensagem, setListaDeMensagens] = React.useState([]);
+    
+    React.useEffect(() => {
+        supabaseClient.
+        from("mensagens")
+            .select("*")
+            .order('id', {ascending: false})
+            .then(({data}) => {
+                console.log("dados da consulta " , data);
+                setListaDeMensagens(data);
+            });
+    }, [])
+
     function handleNovaMensagem(newMessage) {
         const mensagem = {
-            de: 'Roboot',
+            de: 'Khrost',
             Message: newMessage,
             id: listaDeMensagem.length + 1
         }
+
+        supabaseClient
+            .from("mensagens")
+            .insert([
+                mensagem
+            ])
+            .then(({ data }) => {
+                console.log("criando mensagem: " , data);
+                setListaDeMensagens([
+                    data[0],
+                    ...listaDeMensagem,
+                ])
+            })
+
         setListaDeMensagens([
             mensagem,
             ...listaDeMensagem,
