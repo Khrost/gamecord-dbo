@@ -1,18 +1,58 @@
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
 import React, { useMemo } from 'react';
 import appConfig from '../config.json';
+//banco de dados online
+import { createClient } from '@supabase/supabase-js'
 
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzU2Mjk5MywiZXhwIjoxOTU5MTM4OTkzfQ.fmoIj13QWyIfjv0GDNdLakXIluKb164LXvLPUs5t0MY";
+const SUPABASE_URL = "https://kojqzxectxtqsijatbqr.supabase.co";
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+//como fazer um AJAX: https://medium.com/@omariosouto/entendendo-como-fazer-ajax-com-a-fetchapi-977ff20da3c6
+/*supabaseClient.
+        from("mensagens")//qual a tabela
+        .select("*")//quer pegar tudo(*)
+        .then((dados) => {
+            console.log("dados da consulta " , dados);
+        });//quando achar algum, faça
+    //aparentemente ele usa o BD postgreass
+*/
 export default function ChatPage() {
     const [userMensage, setUserText] = React.useState('');//valor | variavel responsavel pela mudança
     const [listaDeMensagem, setListaDeMensagens] = React.useState([]);
-    // Sua lógica vai aqui
+    
+    React.useEffect(() => {
+        supabaseClient.
+        from("mensagens")//qual a tabela
+            .select("*")//quer pegar tudo(*)
+            .order('id', {ascending: 'false'}) //mudando ordem para obter mensagens
+            .then(({data/*,...*/}) => {
+                console.log("dados da consulta " , data);
+                setListaDeMensagens(data);//para pegar o conteúdo que esta sendo enviado
+            });//quando achar algum, faça
+    }, [/*listaDeMensagem*//*chave de ativação/ mudança em algo*/]) /*usado para algo que foge do fluxo padrão do component (execução)
+    se não houvesse isso, cada vez que escrevesse uma letra, iria chamar o BD*/
+
     function handleNovaMensagem(newMessage) {
         const mensagem = {
-            de: 'KKont',
+            de: 'Khrost',
             Message: newMessage,
             id: listaDeMensagem.length + 1
         }
+
+        supabaseClient
+            .from("mensagens")
+            .insert([
+                mensagem
+            ])
+            .then(({ data }) => {
+                console.log("criando mensagem: " , data);
+                setListaDeMensagens([
+                    data[0],
+                    ...listaDeMensagem,
+                ])
+            })
+
         setListaDeMensagens([
             mensagem,
             ...listaDeMensagem,
@@ -177,7 +217,7 @@ function MessageList(props) {
                                     display: 'inline-block',
                                     marginRight: '8px',
                                 }}
-                                src={`https://github.com/vanessametonini.png`}
+                                src={`https://github.com/${atual.de}.png`}
                             />
                             <Text tag="strong">
                                 {atual.de}

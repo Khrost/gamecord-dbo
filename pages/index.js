@@ -167,3 +167,13 @@ export default function HomePage() {
     </>
   );
 }
+
+/*
+  link referência supabase: https://supabase.com/ - parecido com um banco de dados(virtual)
+  referência para dados do gitHub: https://api.github.com/users/khrost
+  buscar informações de outra url: pesquisar por fatch MDN - natural em todo navegador
+  referÊncia para comandos do supabase: https://github.com/supabase/supabase-js
+
+  RECOMENDAÇÕES
+  -> usar o aba network para verificar os erros do código
+*/
