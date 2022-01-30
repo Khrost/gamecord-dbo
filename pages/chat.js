@@ -25,7 +25,7 @@ export default function ChatPage() {
         supabaseClient.
         from("mensagens")//qual a tabela
             .select("*")//quer pegar tudo(*)
-            .order('id', {ascending: 'false'}) //mudando ordem para obter mensagens
+            .order('id', {ascending: false}) //mudando ordem para obter mensagens
             .then(({data/*,...*/}) => {
                 console.log("dados da consulta " , data);
                 setListaDeMensagens(data);//para pegar o conteúdo que esta sendo enviado
