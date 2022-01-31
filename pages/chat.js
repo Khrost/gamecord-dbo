@@ -1,17 +1,39 @@
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
 import React, { useMemo } from 'react';
 import appConfig from '../config.json';
+import { createClient } from '@supabase/supabase-js';//DAO
 
-//DAO
-import { createClient } from '@supabase/supabase-js'
+import { ButtonSendSticker } from '../src/components/ButtonSendSticker';
+
+import { useRouter } from 'next/router';
 
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzU2Mjk5MywiZXhwIjoxOTU5MTM4OTkzfQ.fmoIj13QWyIfjv0GDNdLakXIluKb164LXvLPUs5t0MY";
 const SUPABASE_URL = "https://kojqzxectxtqsijatbqr.supabase.co";
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// normalmente para pegar alguma url usava window.location
+//usando a mais padrão de next
+
+
 export default function ChatPage() {
     const [userMensage, setUserText] = React.useState('');
-    const [listaDeMensagem, setListaDeMensagens] = React.useState([]);
+    const [listaDeMensagem, setListaDeMensagens] = React.useState([
+        /*{
+            de : 'Khrost',
+            Message: ':sticker:https://c.tenor.com/TKpmh4WFEsAAAAAC/alura-gaveta-filmes.gif',
+            id : 0
+        },
+        {
+            de : 'peas',
+            Message: 'O ternário é meio triste',
+            id : 55
+        }*/
+    ]);
+
+    const roteamento = useRouter();
+    const usuarioLogado = roteamento.query.username;
+    console.log(usuarioLogado);
+    console.log(roteamento.query);
     
     React.useEffect(() => {
         supabaseClient.
@@ -19,14 +41,14 @@ export default function ChatPage() {
             .select("*")
             .order('id', {ascending: false})
             .then(({data}) => {
-                console.log("dados da consulta " , data);
+            //    console.log("dados da consulta " , data);
                 setListaDeMensagens(data);
             });
     }, [])
 
     function handleNovaMensagem(newMessage) {
         const mensagem = {
-            de: 'Khrost',
+            de: usuarioLogado,
             Message: newMessage,
             id: listaDeMensagem.length + 1
         }
@@ -126,6 +148,13 @@ export default function ChatPage() {
                                 color: appConfig.theme.colors.neutrals[200],
                             }}
                         />
+                        <ButtonSendSticker 
+                            onStickerClick = {(sticker) => {
+                                //USANDO O COMPONENTE
+                                console.log(sticker);
+                                handleNovaMensagem(`:sticker:${sticker}`)
+                            }}
+                        />
                         <Button
                             disabled={userMensage.length < 1}
                             onClick={(event) => {
@@ -211,7 +240,7 @@ function MessageList(props) {
                                     display: 'inline-block',
                                     marginRight: '8px',
                                 }}
-                                src={`https://github.com/vanessametonini.png`}
+                                src={`https://github.com/${atual.de}.png`}
                             />
                             <Text tag="strong">
                                 {atual.de}
@@ -227,7 +256,14 @@ function MessageList(props) {
                                 {(new Date().toLocaleDateString())}
                             </Text>
                         </Box>
-                        {atual.Message}
+                        {/*Condicional: {atual.Message.startsWith(':sticker:').toString()*/}
+                        {atual.Message.startsWith(':sticker:') //ifelse do react
+                        ? (//se for vdd
+                            <Image src={atual.Message.replace(':sticker:', '')} />
+                        )
+                        :(//se for falso
+                            atual.Message
+                        )}
                     </Text>
                 )
             })}

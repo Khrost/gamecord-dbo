@@ -55,8 +55,8 @@ export default function HomePage() {
             onSubmit={function (infosDoEvent){
               infosDoEvent.preventDefault();
               console.log(infosDoEvent);
-              //evitando o refrash da pagina através de roteamento do next
-              roteamento.push('/chat');
+              
+              roteamento.push(`/chat?username=${username}`);//levar uma informação através da url
             }}
             styleSheet={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
