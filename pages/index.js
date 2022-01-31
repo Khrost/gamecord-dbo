@@ -53,10 +53,8 @@ export default function HomePage() {
           <Box
             as="form" /*area do formulario*/
             onSubmit={function (infosDoEvent){
-              infosDoEvent.preventDefault();/*previni o refresh da pag inteira*/
+              infosDoEvent.preventDefault();
               console.log(infosDoEvent);
-              //window.location.href = "/chat";//padrão para mudar de página
-              
               //evitando o refrash da pagina através de roteamento do next
               roteamento.push('/chat');
             }}
@@ -88,7 +86,7 @@ export default function HomePage() {
               }}
             />
             <Button
-              disabled={username.length < 3} 
+              disabled={username.length < 3}
               type='submit'
               label='Entrar'
               fullWidth
@@ -144,13 +142,3 @@ export default function HomePage() {
     </>
   );
 }
-
-/*
-  link referência supabase: https://supabase.com/ - parecido com um banco de dados(virtual)
-  referência para dados do gitHub: https://api.github.com/users/khrost
-  buscar informações de outra url: pesquisar por fatch MDN - natural em todo navegador
-  referÊncia para comandos do supabase: https://github.com/supabase/supabase-js
-
-  RECOMENDAÇÕES
-  -> usar o aba network para verificar os erros do código
-*/

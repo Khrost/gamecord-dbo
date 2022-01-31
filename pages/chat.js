@@ -1,7 +1,8 @@
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
 import React, { useMemo } from 'react';
 import appConfig from '../config.json';
-//banco de dados online
+
+//DAO
 import { createClient } from '@supabase/supabase-js'
 
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzU2Mjk5MywiZXhwIjoxOTU5MTM4OTkzfQ.fmoIj13QWyIfjv0GDNdLakXIluKb164LXvLPUs5t0MY";
@@ -9,7 +10,7 @@ const SUPABASE_URL = "https://kojqzxectxtqsijatbqr.supabase.co";
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 export default function ChatPage() {
-    const [userMensage, setUserText] = React.useState('');//valor | variavel responsavel pela mudança
+    const [userMensage, setUserText] = React.useState('');
     const [listaDeMensagem, setListaDeMensagens] = React.useState([]);
     
     React.useEffect(() => {
@@ -69,6 +70,7 @@ export default function ChatPage() {
                     borderRadius: '5px',
                     backgroundColor: appConfig.theme.colors.neutrals[700],
                     height: '100%',
+                    width: '100vw',//new
                     maxWidth: '95%',
                     maxHeight: '95vh',
                     padding: '32px',
@@ -174,6 +176,7 @@ function MessageList(props) {
             tag="ul"
             styleSheet={{
                 overflow: 'scroll',
+                'word-wrap': 'break-word',//new
                 display: 'flex',
                 flexDirection: 'column-reverse',
                 flex: 1,
