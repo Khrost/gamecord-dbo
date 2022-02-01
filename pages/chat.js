@@ -14,37 +14,43 @@ const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 // normalmente para pegar alguma url usava window.location
 //usando a mais padrão de next
 
+function escutaMensagensEmTempoReal(adicionaMensagem){//tem que ativar no database
+    return supabaseClient
+        .from("mensagens")
+        .on('INSERT', (respostaLive) => {
+            adicionaMensagem(respostaLive.new);
+        })
+        .subscribe();
+}
 
 export default function ChatPage() {
     const [userMensage, setUserText] = React.useState('');
-    const [listaDeMensagem, setListaDeMensagens] = React.useState([
-        /*{
-            de : 'Khrost',
-            Message: ':sticker:https://c.tenor.com/TKpmh4WFEsAAAAAC/alura-gaveta-filmes.gif',
-            id : 0
-        },
-        {
-            de : 'peas',
-            Message: 'O ternário é meio triste',
-            id : 55
-        }*/
-    ]);
+    const [listaDeMensagem, setListaDeMensagens] = React.useState([]);
 
     const roteamento = useRouter();
     const usuarioLogado = roteamento.query.username;
-    console.log(usuarioLogado);
-    console.log(roteamento.query);
-    
+
     React.useEffect(() => {
         supabaseClient.
         from("mensagens")
             .select("*")
             .order('id', {ascending: false})
             .then(({data}) => {
-            //    console.log("dados da consulta " , data);
+                console.log("dados da consulta " , data);
                 setListaDeMensagens(data);
             });
-    }, [])
+
+        escutaMensagensEmTempoReal((novaMensagem) => {
+            //console.log("nova mensagem ", novaMensagem);
+            setListaDeMensagens((valorAtualDaLista) => {
+                console.log("valor atual:", valorAtualDaLista);
+                return [
+                    novaMensagem,
+                    ...valorAtualDaLista,
+                ]
+            });
+        });
+    }, []);
 
     function handleNovaMensagem(newMessage) {
         const mensagem = {
@@ -59,17 +65,12 @@ export default function ChatPage() {
                 mensagem
             ])
             .then(({ data }) => {
-                console.log("criando mensagem: " , data);
-                setListaDeMensagens([
+                console.log("o que vem em data? ", data)
+            /*    setListaDeMensagens([
                     data[0],
                     ...listaDeMensagem,
-                ])
+                ])*/
             })
-
-        setListaDeMensagens([
-            mensagem,
-            ...listaDeMensagem,
-        ])
         setUserText('');
     }
 
@@ -260,8 +261,7 @@ function MessageList(props) {
                         {atual.Message.startsWith(':sticker:') //ifelse do react
                         ? (//se for vdd
                             <Image src={atual.Message.replace(':sticker:', '')} />
-                        )
-                        :(//se for falso
+                        ):(//se for falso
                             atual.Message
                         )}
                     </Text>
